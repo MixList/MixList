@@ -22,4 +22,18 @@ $(document).ready(function(){
     $('#btn-back-lyric').on('click', function(){
         setPage('my-list');
     })
+    $('#search-form').on('submit', event => {
+        event.preventDefault();
+        let search = {
+            search: $('#search-query').val()
+        }
+        getMusic(search);
+    })
+    $('#btn-add').on('click', () => {
+        setPage('search-data');
+    });
+    $('#btn-back-lyric-from-search').on('click', () => {
+        $('#search-head').empty();
+        setPage('my-list');
+    })
 })

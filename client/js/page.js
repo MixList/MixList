@@ -13,5 +13,9 @@ function setPage(data){
         showList()
     } else if(data === 'my-lyric'){
         changePage('my-lyric');
+    } else if(data === 'search-data') {
+        $('#search-form')[0].reset();
+        $('#search-data').empty();
+        changePage('search-page');
     }
 }

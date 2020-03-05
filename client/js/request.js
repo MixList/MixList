@@ -1,4 +1,5 @@
 //AJAX
+const endpoint = 'http://localhost:3000';
 function showList(){
     $.ajax({
         url: 'http://localhost:3000/playlist',
@@ -47,6 +48,43 @@ function findLyric(title, artist){
                 $('#my-lyric').append(`<h3 class="dataLyric">${lyricsData}</h3>`);
             });
             setPage('my-lyric');
+        }})
+}
+
+function getMusic(search) {
+    $.ajax({
+        method: 'POST',
+        url: `${endpoint}/playlist/search`,
+        data: JSON.stringify(search),
+        contentType: `application/json`,
+        headers: {
+            token: localStorage.getItem('token')
         }
     })
+    .done(data => {
+        showListMusic(data);
+    }).fail(err => {
+        console.log(err);
+    })
+}
+
+function addPlaylist(title, artist) {
+    let obj = {
+        title,
+        artist
+    }
+    $.ajax({
+        method: 'POST',
+        url: `${endpoint}/playlist`,
+        headers: {
+            token: localStorage.getItem('token')
+        },
+        data: JSON.stringify(obj),
+        contentType: `application/json`
+    })
+    .done(data => {
+        setPage('my-list');
+    }).fail(err => {
+        console.log(err);
+    });
 }

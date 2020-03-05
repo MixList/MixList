@@ -47,6 +47,19 @@ function findLyric(title, artist){
                 $('#my-lyric').append(`<h3 class="dataLyric">${lyricsData}</h3>`);
             });
             setPage('my-lyric');
-        }
+        }})
+}
+const endpoint = 'http://localhost:3000';
+
+function getMusic(search) {
+    console.log(search);
+    $.ajax({
+        method: 'POST',
+        url: `${endpoint}/playlist/search`,
+        data: JSON.stringify(search),
+        contentType: `application/json`
+    })
+    .then(data => {
+        showListMusic(data);
     })
 }

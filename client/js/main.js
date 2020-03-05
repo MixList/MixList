@@ -22,4 +22,11 @@ $(document).ready(function(){
     $('#btn-back-lyric').on('click', function(){
         setPage('my-list');
     })
+    $('#search-form').on('submit', event => {
+        event.preventDefault();
+        let search = {
+            search: $('#search-query').val()
+        }
+        getMusic(search);
+    })
 })

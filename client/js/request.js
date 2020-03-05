@@ -119,3 +119,35 @@ function onSignIn(googleUser) {
     })
 }
 
+function register() {
+  $.ajax({
+    url: `${url}/users/register`,
+    method: "POST",
+    data: {
+      username: $('#usernameReg').val(),
+      email: $('#emailReg').val(),
+      password: $('#passwordReg').val()
+    }
+  })
+    .done(data => {
+      console.log(data);     
+      localStorage.setItem("token", data)
+      token = localStorage.getItem("token")
+    })
+}
+
+function login() {
+  $.ajax({
+    url: url + "/users/login",
+    method: "POST",
+    data: {
+      username: $('#usernameLog').val(),
+      email: $('#emailLog').val(),
+      password: $('#passwordLog').val(),      
+    }
+  })
+    .done(data => {
+      localStorage.setItem("token", data)
+      token = localStorage.getItem("token")
+    })
+}

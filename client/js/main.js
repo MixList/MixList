@@ -37,3 +37,7 @@ $(document).ready(function(){
         setPage('my-list');
     })
 })
+
+$('#registerForm').submit((e) => {
+  register()
+})

@@ -2,6 +2,8 @@
 const { User } = require('../models')
 const bcryptFunction = require('../helpers/hashingCompare')
 const jwt = require('jsonwebtoken')
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.CLIENT_ID);
 
 class UserController {
   static readAllUsers(req, res, next) {
@@ -61,7 +63,7 @@ class UserController {
           username: result.username,
           email: result.email
         }, process.env.secret)
-          res.status(201).json(token)
+        res.status(201).json(token)
       })
       .catch(err => {
         // console.log(err);
@@ -69,6 +71,54 @@ class UserController {
       })
   }
 
+  static googleLogin(req, res, next) {
+    const { token } = req.body
+    // console.log(token, "masyukkk gakkk>>>??/");
+
+    async function verify() {
+      const ticket = await client.verifyIdToken({
+        idToken: token,
+        audience: process.env.CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      User.findOne({
+        where: {
+          email: payload.email,
+        }
+      })
+        .then(result => {
+          // console.log(result, "aosaosapsaslap");
+          if (!result) {
+            User.create({
+              email: payload.email,
+              password: "123456",
+              username: payload.name.split(" ").join("")
+            })
+              .then(result => {
+                // console.log(result);
+                const token = jwt.sign({
+                  username: result.username,
+                  email: result.email
+                }, process.env.secret)
+                // console.log(token);
+                res.status(201).json(token)
+              })
+              .catch(err => {
+                next(err)
+              })
+          } else {
+            const token = jwt.sign({
+              username: result.username,
+              email: result.email
+            }, process.env.secret)
+            res.status(200).json(token)
+          }
+        })
+
+    }
+    verify().catch(console.error);
+
+  }
 }
 
 module.exports = UserController

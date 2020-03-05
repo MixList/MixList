@@ -88,3 +88,34 @@ function addPlaylist(title, artist) {
         console.log(err);
     });
 }
+
+let url = "http://localhost:3000"
+let token = localStorage.getItem('token')
+
+function signOut() {
+  var auth2 = gapi.auth2.getAuthInstance();
+  auth2.signOut().then(function () {
+    console.log('User signed out.');
+  });
+  localStorage.removeItem('token')
+}
+
+function onSignIn(googleUser) {
+  var id_token = googleUser.getAuthResponse().id_token;
+  // console.log(id_token); 
+  $.ajax({
+    url: `${url}/users/googleLogin`,
+    method: "POST",
+    data: {
+      token: id_token,
+    },
+  })
+    .done(data => {
+      console.log(data);
+      token = localStorage.setItem('token', data)
+    })
+    .catch(err => {
+      console.log(err);
+    })
+}
+

@@ -1,7 +1,10 @@
 const router = require('express').Router()
 const playlistController = require('../controllers/playlistController')
+const authorization = require('../middlewares/authorization')
 
-//   >>>>>>>> /playlists
-
+router.get('/',  playlistController.showData);
+router.post('/', playlistController.addData);
+router.put('/:id', authorization, playlistController.editData);
+router.delete('/:id', authorization, playlistController.deleteData);
 
 module.exports = router

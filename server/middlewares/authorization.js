@@ -2,7 +2,7 @@
 const { Playlist } = require('../models')
 
 module.exports = (req, res, next) => {
-  const { id } = req.params.id
+  const id = req.user.id
   Playlist
     .findOne({
       where: {

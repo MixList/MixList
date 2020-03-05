@@ -15,7 +15,7 @@ function showListMusic(data) {
             <tr>
                 <td>${x.name}</td>
                 <td>${x.artist}</td>
-                <td><button onClick(nanti)>Add To My Playlist</button></td>
+                <td><button onclick="addPlaylist('${x.name}', '${x.artist}')">Add To My Playlist</button></td>
             </tr>
         `)
     });

@@ -5,7 +5,6 @@ const { Playlist } = require('../models');
 class PlaylistController {
 
     static showData(req, res, next){
-        console.log('masuk sini')
         Playlist.findAll({
             where: {
                 UserId: req.user.id
@@ -94,8 +93,8 @@ class PlaylistController {
         .catch(err=>{
             next(err);
         })
+    }
 
-class PlaylistController {
     static search(req, res, next) {
         let search = req.body.search;
         let url = `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${search}&api_key=6d06b477bb91e3e396f172130f7952a3&format=json`;

@@ -29,4 +29,11 @@ $(document).ready(function(){
         }
         getMusic(search);
     })
+    $('#btn-add').on('click', () => {
+        setPage('search-data');
+    });
+    $('#btn-back-lyric-from-search').on('click', () => {
+        $('#search-head').empty();
+        setPage('my-list');
+    })
 })

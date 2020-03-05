@@ -97,7 +97,6 @@ class PlaylistController {
 
 class PlaylistController {
     static search(req, res, next) {
-        console.log(req.body);
         let search = req.body.search;
         let url = `http://ws.audioscrobbler.com/2.0/?method=track.search&track=${search}&api_key=6d06b477bb91e3e396f172130f7952a3&format=json`;
         axios.get(url)

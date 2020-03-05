@@ -52,7 +52,6 @@ function findLyric(title, artist){
 const endpoint = 'http://localhost:3000';
 
 function getMusic(search) {
-    console.log(search);
     $.ajax({
         method: 'POST',
         url: `${endpoint}/playlist/search`,

@@ -10,13 +10,14 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
 
-<body>
+<body style="background-color: lightgray;">
 
     <div id="my-list" class="allPages" style="text-align: center;">
         <h1>My Playlist</h1>
-        <button id="btn-add">Add to Playlist</button>
-        <button type="button" id="logoutBtn">Logout</button>
-        <table border="1" id="table-list" class="table">
+        <button id="btn-add" class="btn btn-success">Add to Playlist</button>
+        <button type="button" class="btn btn-danger" id="logoutBtn">Logout</button>
+        <button id="btn-edit-password" class="btn btn-info">Change Password</button>
+        <table border="3px solid" id="table-list" class="table mt-3">
             <tr>
                 <th>Title</th>
                 <th>Artist</th>
@@ -25,16 +26,21 @@
         </table>
     </div>
 
+    
     <div id="my-lyric" class="allPages" style="text-align: center;">
-        <button id="btn-back-lyric">Back to My List</button>
+        <button id="btn-back-lyric" class="btn btn-primary mt-4 mb-4">Back to My List</button>
     </div>
+    
+    <!--       SEARCH     -->
+
     <div class="allPages" id="search-page" style="text-align: center;">
-        <button id="btn-back-lyric-from-search">Back to My List</button>
+        <button id="btn-back-lyric-from-search" class="btn btn-success mb-4 mt-4">Back to My List</button><br>
         <form id="search-form">
-            <input type="text" id="search-query">
-            <button type="submit">Search</button>
+            <label>Search Your Music In Here</label><br>
+            <input type="text" id="search-query" style="width: 600px;"><br>
+            <button type="submit" class="btn btn-primary mt-3">Search</button>
         </form>
-        <table>
+        <table border="3px solid" class="table mt-3">
             <thead id="search-head">
 
             </thead>
@@ -45,7 +51,8 @@
     </div>
     <!--        REGISTER       -->
 
-    <div id="registerPage" class="allPages">
+    <div id="registerPage" class="allPages container" style="text-align: center;">
+        <h1>MixList</h1>
         <form id="registerForm">
             <div class="form-group">
                 <label for="exampleInputEmail1">Username</label>
@@ -56,7 +63,7 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Email</label>
-                <input type="email" class="form-control" id="emailReg" placeholder="Password">
+                <input type="email" class="form-control" id="emailReg" placeholder="Email">
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
@@ -66,16 +73,13 @@
                 <p>have an account? go to <a href="">login</a></p>
             </div>
             <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="#" onclick="signOut();">Sign out</a>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
         </form>
-        <a href="#" onclick="signOut();">Sign out</a>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
     </div>
 
     <!--        LOGIN       -->
 
-    <div id="loginPage" class="allPages">
+    <div id="loginPage" class="allPages container" style="text-align: center;">
+        <h1>MixList</h1>
         <form id="loginForm">
             <div class="form-group">
                 <label for="exampleInputEmail1">Username</label>
@@ -86,25 +90,37 @@
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Email</label>
-                <input type="email" class="form-control" id="emailLog" placeholder="Password">
+                <input type="email" class="form-control" id="emailLog" placeholder="Email">
             </div>
             <div class="form-group">
                 <label for="exampleInputPassword1">Password</label>
                 <input type="password" class="form-control" id="passwordLog" placeholder="Password">
             </div>
-            <div class="form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
             <div id="logoutAnchor">
                 <p>Don't have an account? go to <a href="">register</a></p>
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-            <a href="" onclick="signOut();">Sign out</a>
-            <div class="g-signin2" data-onsuccess="onSignIn">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+                <div>
+                    <div style="width: 100px;" class="g-signin2 mx-auto" class="g-signin2" data-onsuccess="onSignIn"></div>
+                </div>
+            </div>
         </form>
-        <a href="#" onclick="signOut();">Sign out</a>
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
+    <!-- Edit Password -->
+    <div id="edit-password" class="allPages" style="text-align: center;">
+        <h3>Change Password</h3>
+        <form>
+            <label for="exampleInputPassword1">Old Password</label><br>
+            <input type="password" id="oldPasswordEdit" placeholder="Password"><br>
+            <label for="exampleInputPassword1">New Password</label><br>
+            <input type="password" id="newPasswordEdit" placeholder="Password"><br>
+            <button type="submit" id="btn-edit" class="btn btn-success mt-4">Change Password</button><br>
+            <button type="submit" id="btn-edit-cancel" class="btn btn-primary mt-2">Cancel</button>
+        </form>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>

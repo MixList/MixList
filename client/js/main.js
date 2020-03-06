@@ -22,8 +22,27 @@ $(document).ready(function () {
     logout()
     setPage('logout')
   })
+  $('#btn-edit-password').on('click', function(){
+    setPage('editPassword');
+  })
+  $('#btn-edit').on('click', function(event){
+    event.preventDefault();
 
+    let oldPassword = $('#oldPasswordEdit').val();
+    let newPassword = $('#newPasswordEdit').val();
 
+    editPassword(oldPassword, newPassword);
+  })
+  $('#btn-edit-cancel').on('click', (event) => {
+      event.preventDefault();
+      setPage('my-list');
+  })
+
+  $(document).on('click', '.btn-add-playlist', function(){
+        let name = $(this).data('name');
+        let addArtist = $(this).data('artist2');
+        addPlaylist(name, addArtist)
+  })
 
   $(document).on('click', '.btn-delete', function () {
     let idDelete = $(this).data('id');

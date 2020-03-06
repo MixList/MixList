@@ -10,6 +10,12 @@ function setPage(data){
         $('.dataLyric').empty();
         $('.list-content').empty();
         changePage('my-list');
+        if(localStorage.getItem('google')){
+            $('#btn-edit-password').hide()
+        }else{
+            $('#btn-edit-password').show()
+        }
+
         showList()
     } else if(data === 'my-lyric'){
         changePage('my-lyric');
@@ -21,5 +27,7 @@ function setPage(data){
         changePage('registerPage')
     } else if (data === 'login') {
         changePage('loginPage')
+    }else if(data === 'editPassword'){
+        changePage('edit-password')
     }
 }

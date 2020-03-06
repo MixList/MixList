@@ -29,7 +29,6 @@ class UserController {
       })
       .then(result => {
         const compare = bcryptFunction.compare(password, result.password)
-        // console.log(compare);
         if (compare) {
           const token = jwt.sign({
             id: result.id,
@@ -46,7 +45,6 @@ class UserController {
       })
       .catch(err => {
         next(err)
-        // console.log('woeoeoee')
       })
   }
   static register(req, res, next) {
@@ -66,59 +64,85 @@ class UserController {
         res.status(201).json(token)
       })
       .catch(err => {
-        // console.log(err);
         next(err)
       })
   }
 
   static googleLogin(req, res, next) {
     const { token } = req.body
-    // console.log(token, "masyukkk gakkk>>>??/");
+    let usernameGoogle;
+    client.verifyIdToken({
+      idToken: token,
+      audience: process.env.CLIENT_ID,
+    })
+        .then(ticket=>{
+          usernameGoogle = ticket.payload.name
 
-    async function verify() {
-      const ticket = await client.verifyIdToken({
-        idToken: token,
-        audience: process.env.CLIENT_ID,
-      });
-      const payload = ticket.getPayload();
-      User.findOne({
-        where: {
-          email: payload.email,
-        }
-      })
+          return User.findOne({
+            where: {
+              email: ticket.payload.email
+            }
+          })
+        })
         .then(result => {
-          // console.log(result, "aosaosapsaslap");
           if (!result) {
-            User.create({
+            return User.create({
               email: payload.email,
               password: "123456",
-              username: payload.name.split(" ").join("")
+              username: usernameGoogle.split(" ").join("")
             })
-              .then(result => {
-                // console.log(result);
-                const token = jwt.sign({
-                  username: result.username,
-                  email: result.email
-                }, process.env.secret)
-                // console.log(token);
-                res.status(201).json(token)
-              })
-              .catch(err => {
-                next(err)
-              })
           } else {
-            const token = jwt.sign({
-              username: result.username,
-              email: result.email
-            }, process.env.secret)
-            res.status(200).json(token)
+            return result;
           }
+        })
+        .then(result => {
+          const token = jwt.sign({
+            id: result.id,
+            username: result.username,
+            email: result.email
+          }, process.env.secret)
+          res.status(201).json(token)
+        })
+        .catch(err => {
+          next(err)
         })
 
     }
-    verify().catch(console.error);
 
+    static editPassword(req, res, next){
+      let oldPass = req.body.oldPassword;
+      let newPass = req.body.newPassword;
+      User.findOne({
+        where: {
+          id: req.user.id
+        }
+      })
+      .then(data=>{
+          let compareOldPass = bcryptFunction.compare(oldPass, data.password)
+
+          if(compareOldPass){
+            return User.update({
+              password: newPass
+            }, {
+              where: {
+                id: req.user.id
+              }, individualHooks: true
+            })
+          }else{
+            throw {
+              msg: 'wrong password',
+              status: 401
+            }
+          }
+        })
+        .then(data=>{
+          res.status(200).json('Berhasil mengganti password');
+        })
+        .catch(err=>{
+          next(err)
+        })
+    }
   }
-}
+
 
 module.exports = UserController

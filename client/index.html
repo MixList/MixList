@@ -1,14 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>Document</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta name="google-signin-client_id"
+        content="773498885313-tqbi7q62grs1309dc19lk6qi8g66kgc5.apps.googleusercontent.com">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
 </head>
+
 <body>
 
     <div id="my-list" class="allPages" style="text-align: center;">
         <h1>My Playlist</h1>
         <button id="btn-add">Add to Playlist</button>
+        <button type="button" id="logoutBtn">Logout</button>
         <table border="1" id="table-list" class="table">
             <tr>
                 <th>Title</th>
@@ -29,21 +36,91 @@
         </form>
         <table>
             <thead id="search-head">
-                
+
             </thead>
             <tbody id="search-data">
 
             </tbody>
         </table>
     </div>
-    
+    <!--        REGISTER       -->
+
+    <div id="registerPage" class="allPages">
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" class="form-control" id="usernameReg" aria-describedby="emailHelp"
+                    placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Email</label>
+                <input type="email" class="form-control" id="emailReg" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="passwordReg" placeholder="Password">
+            </div>
+            <div id="loginAnchor">
+                <p>have an account? go to <a href="">login</a></p>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="#" onclick="signOut();">Sign out</a>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        </form>
+        <a href="#" onclick="signOut();">Sign out</a>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
+    <!--        LOGIN       -->
+
+    <div id="loginPage" class="allPages">
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="exampleInputEmail1">Username</label>
+                <input type="text" class="form-control" id="usernameLog" aria-describedby="emailHelp"
+                    placeholder="Enter email">
+                <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone
+                    else.</small>
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Email</label>
+                <input type="email" class="form-control" id="emailLog" placeholder="Password">
+            </div>
+            <div class="form-group">
+                <label for="exampleInputPassword1">Password</label>
+                <input type="password" class="form-control" id="passwordLog" placeholder="Password">
+            </div>
+            <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="exampleCheck1">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+            </div>
+            <div id="logoutAnchor">
+                <p>Don't have an account? go to <a href="">register</a></p>
+            </div>
+            <button type="submit" class="btn btn-primary">Submit</button>
+            <a href="" onclick="signOut();">Sign out</a>
+            <div class="g-signin2" data-onsuccess="onSignIn">
+        </form>
+        <a href="#" onclick="signOut();">Sign out</a>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+    </div>
+
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-    <script src="./js/page.js"></script>  
-    <script src="./js/request.js"></script>  
-    <script src="./js/view.js"></script>   
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="./js/page.js"></script>
+    <script src="./js/request.js"></script>
+    <script src="./js/view.js"></script>
     <script src="./js/main.js"></script>
-    <script integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>   
+    <script integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
 </body>
+
 </html>

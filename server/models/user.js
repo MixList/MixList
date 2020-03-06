@@ -53,9 +53,9 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
       hooks: {
-        beforeCreate(user, options) {
-          const hashingPass = hashing.hashing(user.password)
-          user.password = hashingPass
+        beforeSave(instance, options) {
+          const hashingPass = hashing.hashing(instance.password)
+          instance.password = hashingPass
         }
     },
     sequelize

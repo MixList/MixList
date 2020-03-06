@@ -6,6 +6,7 @@ function authentication (req, res, next) {
     const token = req.headers.token
     const user = jwt.verify(token, process.env.secret)
     req.user = user
+    
     next()
   } catch (error) {
     throw {

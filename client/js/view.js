@@ -4,7 +4,7 @@ function showListMusic(data) {
     $('#search-data').empty();
     $('#search-head').empty();
     $('#search-head').append(`
-            <tr>
+        <tr>
             <th>Title</th>
             <th>Artist</th>
             <th>Action</th>
@@ -15,7 +15,7 @@ function showListMusic(data) {
             <tr>
                 <td>${x.name}</td>
                 <td>${x.artist}</td>
-                <td><button onclick="addPlaylist('${x.name}', '${x.artist}')">Add To My Playlist</button></td>
+                <td><button class="btn-add-playlist btn btn-primary" data-name="${x.name}" data-artist2="${x.artist}">Add To My Playlist</button></td>
             </tr>
         `)
     });

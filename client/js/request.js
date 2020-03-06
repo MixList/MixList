@@ -14,14 +14,14 @@ function showList() {
           <td>${todos.title}</td>
           <td>${todos.artist}</td>
           <td>
-          <button data-id="${todos.id}" class="btn-delete">REMOVE FROM LIST</button>
-          <button data-title="${todos.title}" data-artist="${todos.artist}" class="btn-lyric">FIND LYRIC</button>
+          <button data-id="${todos.id}" class="btn-delete btn btn-danger">REMOVE FROM LIST</button>
+          <button data-title="${todos.title}" data-artist="${todos.artist}" class="btn-lyric btn btn-info">FIND LYRIC</button>
           </td>
           </tr>`);
 
       });
 
-      $('#table-list')
+    //   $('#table-list')
     }
   })
 }
@@ -95,7 +95,7 @@ function addPlaylist(title, artist) {
 
 function onSignIn(googleUser) {
   var id_token = googleUser.getAuthResponse().id_token;
-  // console.log(id_token); 
+ 
   $.ajax({
     url: `${url}/users/googleLogin`,
     method: "POST",
@@ -106,6 +106,7 @@ function onSignIn(googleUser) {
     .done(data => {
       console.log(data);
       token = localStorage.setItem('token', data)
+      localStorage.setItem('google', 'login')
       setPage('my-list')
     })
     .catch(err => {
@@ -135,6 +136,25 @@ function register() {
     })
 }
 
+function editPassword(oldPassword, newPassword){
+  console.log(newPassword, oldPassword)  
+  $.ajax({
+        url: `${endpoint}/users/edit`,
+        method: 'POST',
+        headers: {token: localStorage.getItem('token')},
+        data: {
+          oldPassword,
+          newPassword
+        },
+        success: function(data){
+            setPage('my-list');
+        },
+        fail: function(error){
+            console.log(error)
+        }
+    })
+}
+
 function login() {
   $.ajax({
     url: `${url}/users/login`,
@@ -154,6 +174,7 @@ function login() {
 }
 
 function logout() {
+  localStorage.removeItem('google')
   localStorage.removeItem('token')
   var auth2 = gapi.auth2.getAuthInstance();
   auth2.signOut().then(function () {

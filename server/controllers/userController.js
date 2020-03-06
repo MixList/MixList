@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
+const sendEmail = require('../helpers/api')
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 class UserController {
   static readAllUsers(req, res, next) {
     User
@@ -30,6 +35,7 @@ class UserController {
       .then(result => {
         const compare = bcryptFunction.compare(password, result.password)
         // console.log(compare);
+     
         if (compare) {
           const token = jwt.sign({
             id: result.id,
@@ -58,6 +64,8 @@ class UserController {
         password
       })
       .then(result => {
+        let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+        sgMail.send(msg)
         const token = jwt.sign({
           id: result.id,
           username: result.username,
@@ -88,6 +96,7 @@ class UserController {
       })
         .then(result => {
           // console.log(result, "aosaosapsaslap");
+          
           if (!result) {
             User.create({
               email: payload.email,
@@ -96,6 +105,8 @@ class UserController {
             })
               .then(result => {
                 // console.log(result);
+                let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+                sgMail.send(msg)
                 const token = jwt.sign({
                   username: result.username,
                   email: result.email

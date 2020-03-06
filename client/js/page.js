@@ -17,5 +17,9 @@ function setPage(data){
         $('#search-form')[0].reset();
         $('#search-data').empty();
         changePage('search-page');
+    } else if (data === 'register') {
+        changePage('registerPage')
+    } else if (data === 'login') {
+        changePage('loginPage')
     }
 }

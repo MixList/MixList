@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
+const sendEmail = require('../helpers/api')
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 class UserController {
   static readAllUsers(req, res, next) {
     User
@@ -56,6 +61,8 @@ class UserController {
         password
       })
       .then(result => {
+        let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+        sgMail.send(msg)
         const token = jwt.sign({
           id: result.id,
           username: result.username,
@@ -71,78 +78,95 @@ class UserController {
   static googleLogin(req, res, next) {
     const { token } = req.body
     let usernameGoogle;
+    let emailGoogle;
     client.verifyIdToken({
       idToken: token,
       audience: process.env.CLIENT_ID,
     })
-        .then(ticket=>{
-          usernameGoogle = ticket.payload.name
-
-          return User.findOne({
-            where: {
-              email: ticket.payload.email
-            }
-          })
-        })
-        .then(result => {
-          if (!result) {
-            return User.create({
-              email: payload.email,
-              password: "123456",
-              username: usernameGoogle.split(" ").join("")
-            })
-          } else {
-            return result;
+      .then(ticket => {
+        usernameGoogle = ticket.payload.name
+        emailGoogle = ticket.payload.email
+        return User.findOne({
+          where: {
+            email: ticket.payload.email
           }
         })
-        .then(result => {
-          const token = jwt.sign({
-            id: result.id,
-            username: result.username,
-            email: result.email
-          }, process.env.secret)
-          res.status(201).json(token)
-        })
-        .catch(err => {
-          next(err)
-        })
-
-    }
-
-    static editPassword(req, res, next){
-      let oldPass = req.body.oldPassword;
-      let newPass = req.body.newPassword;
-      User.findOne({
-        where: {
-          id: req.user.id
+      })
+      .then(result => {
+        if (!result) {
+          return User.create({
+            email: emailGoogle,
+            password: "123456",
+            username: usernameGoogle.split(" ").join("")
+          })
+            .then(result => {
+              // console.log(result);
+              let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+              sgMail.send(msg)
+              const token = jwt.sign({
+                id: result.id,
+                username: result.username,
+                email: result.email
+              }, process.env.secret)
+              // console.log(token);
+              res.status(201).json(token)
+            })
+            .catch(err => {
+              next(err)
+            })
+        } else {
+          return result;
         }
       })
-      .then(data=>{
-          let compareOldPass = bcryptFunction.compare(oldPass, data.password)
+      .then(result => {
+        console.log(result.id);
+        const token = jwt.sign({
+          id: result.id,
+          username: result.username,
+          email: result.email
+        }, process.env.secret)
+        res.status(201).json(token)
+      })
+      .catch(err => {
+        next(err)
+      })
 
-          if(compareOldPass){
-            return User.update({
-              password: newPass
-            }, {
-              where: {
-                id: req.user.id
-              }, individualHooks: true
-            })
-          }else{
-            throw {
-              msg: 'wrong password',
-              status: 401
-            }
-          }
-        })
-        .then(data=>{
-          res.status(200).json('Berhasil mengganti password');
-        })
-        .catch(err=>{
-          next(err)
-        })
-    }
   }
+
+  static editPassword(req, res, next) {
+    let oldPass = req.body.oldPassword;
+    let newPass = req.body.newPassword;
+    User.findOne({
+      where: {
+        id: req.user.id
+      }
+    })
+      .then(data => {
+        let compareOldPass = bcryptFunction.compare(oldPass, data.password)
+
+        if (compareOldPass) {
+          return User.update({
+            password: newPass
+          }, {
+            where: {
+              id: req.user.id
+            }, individualHooks: true
+          })
+        } else {
+          throw {
+            msg: 'wrong password',
+            status: 401
+          }
+        }
+      })
+      .then(data => {
+        res.status(200).json('Berhasil mengganti password');
+      })
+      .catch(err => {
+        next(err)
+      })
+  }
+}
 
 
 module.exports = UserController

@@ -5,6 +5,11 @@ const jwt = require('jsonwebtoken')
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.CLIENT_ID);
 
+const sendEmail = require('../helpers/api')
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+
 class UserController {
   static readAllUsers(req, res, next) {
     User
@@ -56,6 +61,8 @@ class UserController {
         password
       })
       .then(result => {
+        let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+        sgMail.send(msg)
         const token = jwt.sign({
           id: result.id,
           username: result.username,
@@ -91,6 +98,20 @@ class UserController {
               password: "123456",
               username: usernameGoogle.split(" ").join("")
             })
+              .then(result => {
+                // console.log(result);
+                let msg = sendEmail(result.email, `Hey, ${result.username}. You've been registered to MixList since ${new Date}. Enjoy your playlist. Have a nice day!`)
+                sgMail.send(msg)
+                const token = jwt.sign({
+                  username: result.username,
+                  email: result.email
+                }, process.env.secret)
+                // console.log(token);
+                res.status(201).json(token)
+              })
+              .catch(err => {
+                next(err)
+              })
           } else {
             return result;
           }
